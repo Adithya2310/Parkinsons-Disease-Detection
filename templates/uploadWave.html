@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Parkinson's disease</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">  
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/upload.css" rel="stylesheet">
+    <style>
+        .text-green{
+            color: rgb(7, 255, 7);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Start -->
+<div class="container-fluid bg-primary py-5 mb-5 hero-header">
+    <div class="container py-5">
+        <div class="row justify-content-start">
+            <div class="col-lg-8 text-center text-lg-start">
+                <!--<h5 class="d-inline-block text-primary text-uppercase border-bottom border-5" style="border-color: rgba(256, 256, 256, .3) !important;">Find Your Stage</h5>-->
+                <h1 class="display-1 text-white mb-md-4">Parkinson Disease Detection</h1>
+                <div class="pt-2">
+                    <div class="btn btn-outline-light rounded-pill py-md-3 px-md-5 mx-2">
+                        <form action="/uploadWave" method="POST" enctype="multipart/form-data">
+                           <!--- <label for="file">Select a file:</label>-->
+                            <input type="file" name="image">
+                            <input type="submit" value="Submit">
+                        </form>
+                    </div>
+                    <p id="result" style="font-weight: bold; font-size: large;" class="pt-3 ps-5"></p>   
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+<script>
+    const res=document.getElementById('result');
+    req = {{ result|tojson }}
+    console.log(req);
+        if(req=="null");
+        else if(req)
+        {
+            res.innerHTML="Parkinsons Disease Detected"
+            res.classList.add("text-danger")
+        }
+        else
+        {
+            res.innerHTML="The Patient is Healthy"
+            res.classList.add("text-green")
+        }
+</script>
+</body>
