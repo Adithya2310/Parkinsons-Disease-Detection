@@ -1,0 +1,144 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #canvas
+        {
+            border: 5px solid rgb(110, 149, 207);
+            margin-left:500px;
+            margin-top:50px;
+            display: block;
+            background-color: white;
+            cursor: crosshair;
+        }
+        .button
+        {
+            display: flex;
+            justify-content: center;
+            gap:50px;
+            margin-left: 80px;
+            margin-top: 10px;
+            align-items: center;
+        }
+        .switch
+        {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+            gap: 20px;
+            margin-left: 50px;
+        }
+        .text-green{
+            color: rgb(7, 255, 7);
+        }
+    </style>
+</head>
+<body class="bg-primary">
+    <div class="switch">
+        <a href="{{ url_for('drawSpiral') }}" class="btn btn-outline-light rounded-pill py-md-3 px-md-5 mx-2">Spiral</a>
+        <a href="{{ url_for('drawWave') }}" class="active btn btn-outline-light rounded-pill py-md-3 px-md-5 mx-2">Wave</a>
+    </div>
+    <div class="board">
+        <form id="myForm" action="{{url_for('predictWave')}}" method="POST" enctype="multipart/form-data">
+            <canvas id="canvas" name="draw" class="canvas"></canvas>
+            <input type="hidden" id ="url" name="url" value="">
+            <p id="result" style="text-align: center; font-weight: bold; font-size: large;" class=" ps-5  font-weight-bold"></p>
+            <div class="button">
+                <button class="detect btn btn-outline-light rounded py-md-1 px-md-3 mx-2">Download</button>
+                <input class="btn btn-outline-light rounded py-md-1 px-md-3 mx-2" type="submit" id="predict" value="Predict">
+                <button class="clear btn btn-outline-light rounded py-md-1 px-md-3 mx-2">Clear</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // syntax for drawing
+        window.addEventListener('load',()=>{
+            const canvas=document.getElementById("canvas");
+            const ctx=canvas.getContext("2d");
+            let painting=false;
+            
+            canvas.height=500;
+            canvas.width=600;
+            function startPosition(e)
+            {
+                painting=true;
+            }
+            function finishedPosition()
+            {
+                painting=false;
+                ctx.beginPath();
+            }
+            function draw(e)
+            {
+                if(!painting) return;
+                ctx.lineWidth=5;
+                ctx.lineCap="round";
+                ctx.lineTo(e.clientX-500, e.clientY-160);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(e.clientX-500, e.clientY-160);
+            }
+            function clearCanv()
+            {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            canvas.addEventListener("mousedown",startPosition);
+            canvas.addEventListener("mouseup", finishedPosition);
+            canvas.addEventListener("mousemove",draw);
+            // to clear the screen
+            const clearButton=document.querySelector(".clear");
+            clearButton.addEventListener("click",()=>{
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+
+            // to submit the drawing
+            const saveButton=document.querySelector(".detect");
+            saveButton.addEventListener("click",()=>{
+                let data=canvas.toDataURL("image/png");
+                let a=document.createElement("a");
+                a.href=data;
+                a.download="sketch.png";
+                a.click();
+            });
+
+            const canvasForm=document.getElementById("myForm");
+            const urlInput=document.getElementById("url");
+            canvasForm.addEventListener("submit",(e)=>{
+                e.preventDefault();
+                const dataUrl=canvas.toDataURL("image/png");
+                urlInput.value=dataUrl;
+                canvasForm.submit();
+            })
+            // to save the Image
+            // const saveButton=document.querySelector(".detect");
+            // saveButton.addEventListener("click",()=>{
+            //     let data = canvas.toDataURL("imag/png")
+            //     let a = document.createElement("a")
+            //     a.href = data
+            //     a.download = "sketch.png"
+            //     a.click()
+            // })
+        })
+        const res=document.getElementById('result');
+        req = {{ result|tojson }}
+        console.log(req);
+        if(req=="null");
+        else if(req)
+        {
+            res.innerHTML="Parkinsons Disease Detected"
+            res.classList.add("text-danger")
+        }
+        else
+        {
+            res.innerHTML="The Patient is Healthy"
+            res.classList.add("text-green")
+        }
+    </script>
+</body>
+</html>
