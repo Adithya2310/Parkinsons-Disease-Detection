@@ -1,7 +1,7 @@
 # Parkinsons-Disease-Detection
 Parkinsons Disease Detection using Spiral and Wave images from the patients. Traditionally the disease is detected using MRI and SPECT scans, but these techniques have
 many shortcomings and arent accessible to common people. This project tries to overcome those Issues by trying to detect the disease using minimum eqiupment. It uses 
-Handwriting analysis to detect the disease using Machine Learning
+Handwriting analysis to detect the disease using Machine Learning with a accuracy of 86%.
 
 ## Technology used 
 1) It uses RandomForestClassifier and XGBoost Algorithms as the models
